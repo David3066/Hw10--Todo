@@ -1,0 +1,57 @@
+<main>
+  {{#if error}}
+    <div class="error-message">
+      ⚠️ {{error}}
+    </div>
+  {{/if}}
+
+  <!-- Add Todo Form -->
+  <section class="add-todo-section">
+    <form action="/add-todo" method="POST" class="add-todo-form">
+      <input 
+        type="text" 
+        name="task" 
+        placeholder="Add a new task..." 
+        maxlength="200"
+        required
+      >
+      <button type="submit" class="btn btn-add">Add Todo</button>
+    </form>
+  </section>
+
+  <!-- Todo List -->
+  <section class="todos-section">
+    {{#if todos}}
+      <ul class="todo-list">
+        {{#each todos}}
+          <li class="todo-item {{#if this.is_complete}}completed{{/if}}">
+            <div class="todo-content">
+              <form action="/toggle-todo/{{this.id}}" method="POST" class="toggle-form">
+                <input 
+                  type="hidden" 
+                  name="isComplete" 
+                  value="{{#if this.is_complete}}false{{else}}true{{/if}}"
+                >
+                <input 
+                  type="checkbox" 
+                  class="checkbox"
+                  {{#if this.is_complete}}checked{{/if}}
+                  onchange="this.form.submit()"
+                >
+              </form>
+              <span class="task-text">{{this.task}}</span>
+            </div>
+
+            <form action="/delete-todo/{{this.id}}" method="POST" class="delete-form">
+              <button type="submit" class="btn btn-delete">Delete</button>
+            </form>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <div class="empty-state">
+        <p>No todos yet. Create one to get started! 🚀</p>
+      </div>
+    {{/if}}
+  </section>
+</main>
